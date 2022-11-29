@@ -1,0 +1,8 @@
+name: Interconnect
+version: '${project.version}'
+main: com.iridevescence.interconnect.Interconnect
+api-version: 1.19
+prefix: Interconnect
+load: STARTUP
+authors: [ Arcuvium, BearDadBod ]
+description: The Interconnect server's custom RPG plugin.
