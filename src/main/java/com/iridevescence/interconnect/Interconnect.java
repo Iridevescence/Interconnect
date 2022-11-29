@@ -1,7 +1,10 @@
 package com.iridevescence.interconnect;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+
+import com.iridevescence.interconnect.event.InterconnectBlockEvents;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 
@@ -17,9 +20,8 @@ public final class Interconnect extends JavaPlugin {
   
     @Override
     public void onEnable() {
-      // Initialize an audiences instance for the plugin
       this.adventure = BukkitAudiences.create(this);
-      // then do any other initialization
+      Bukkit.getPluginManager().registerEvents(new InterconnectBlockEvents(), this);
     }
   
     @Override
