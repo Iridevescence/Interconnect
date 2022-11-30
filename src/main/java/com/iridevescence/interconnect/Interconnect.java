@@ -1,15 +1,14 @@
 package com.iridevescence.interconnect;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
 import com.iridevescence.interconnect.event.InterconnectBlockEvents;
-import com.iridevescence.interconnect.util.player.InterconnectPlayerManager;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 
@@ -18,6 +17,8 @@ public final class Interconnect extends JavaPlugin {
     public static final Logger LOGGER = INSTANCE.getSLF4JLogger();
 
     public static final Path DATA_DIR = INSTANCE.getDataFolder().toPath();
+
+    public static final HashMap<String, HashMap<String, String>> TRANSLATIONS = new HashMap<>();
 
     private BukkitAudiences adventure;
 
@@ -42,9 +43,6 @@ public final class Interconnect extends JavaPlugin {
         if (this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
-        }
-        for (Player player : this.getServer().getOnlinePlayers()) {
-            InterconnectPlayerManager.save(player);
         }
     }
 }
