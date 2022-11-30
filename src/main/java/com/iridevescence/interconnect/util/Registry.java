@@ -1,7 +1,9 @@
-package com.iridevescence.interconnect.api.skill;
+package com.iridevescence.interconnect.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.iridevescence.interconnect.api.skill.Restriction;
 
 public class Registry {
     private static final HashMap<Restriction.Type, Restriction> RESTRICTIONS = new HashMap<>();

@@ -2,7 +2,7 @@ package com.iridevescence.interconnect.util;
 
 import java.util.HashMap;
 
-public class StringIndexUtil {
+public class StringStorage {
     private static final HashMap<Integer, String> I2S = new HashMap<>();
     private static final HashMap<String, Integer> S2I = new HashMap<>();
     

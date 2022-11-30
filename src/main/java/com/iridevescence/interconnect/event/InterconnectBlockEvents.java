@@ -6,8 +6,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import com.iridevescence.interconnect.api.skill.Registry;
 import com.iridevescence.interconnect.api.skill.Restriction;
+import com.iridevescence.interconnect.util.Registry;
 
 public class InterconnectBlockEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
