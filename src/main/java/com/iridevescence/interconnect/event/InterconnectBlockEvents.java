@@ -17,12 +17,13 @@ import net.kyori.adventure.text.format.TextColor;
 public class InterconnectBlockEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        Player breaker = event.getPlayer();
+        Player player = event.getPlayer();
         String blockName = event.getBlock().getType().name();
         for (Restriction restriction : Registry.getRestrictionsByType(Restriction.Type.BREAK_BLOCK)) {
-            if (restriction.target() == blockName && !restriction.isUnlockedForPlayer(breaker)) {
+            if (restriction.target() == blockName && !restriction.isUnlockedForPlayer(player)) {
                 event.setCancelled(true);
-                breaker.sendActionBar(Component.text("You cannot break " + blockName + " yet! You need the perk '" + Interconnect.TRANSLATIONS.getOrDefault(breaker.locale().getLanguage(), Interconnect.TRANSLATIONS.get("en_US")).get(restriction.name() + ".")).color(TextColor.fromHexString("#CC0033")));
+                player.sendActionBar(Component.text("You cannot break " + blockName + " yet! You need the perk '" + Interconnect.TRANSLATIONS.getOrDefault(player.locale().getLanguage(), Interconnect.TRANSLATIONS.get("en_US")).get(restriction.name() + ".")).color(TextColor.fromHexString("#CC0033")));
+                break;
             }
         }
     }
