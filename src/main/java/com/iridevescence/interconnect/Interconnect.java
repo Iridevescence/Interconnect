@@ -14,7 +14,7 @@ import com.iridevescence.interconnect.event.InterconnectBlockEvents;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 
 public final class Interconnect extends JavaPlugin {
-    public static final Interconnect INSTANCE = new Interconnect();
+    public static final Interconnect INSTANCE = Interconnect.getPlugin(Interconnect.class);
     public static final Logger LOGGER = INSTANCE.getSLF4JLogger();
 
     public static final Path DATA_DIR = INSTANCE.getDataFolder().toPath();
