@@ -6,3 +6,8 @@ prefix: Interconnect
 load: STARTUP
 authors: [ Arcuvium, BearDadBod ]
 description: The Interconnect server's custom RPG plugin.
+commands:
+   restriction:
+      description: Modifies restrictions.
+      usage: /restriction <ARGS_HERE_TODO>
+      permission: interconnect.restriction

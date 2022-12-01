@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
+import com.iridevescence.interconnect.command.RestrictionCommand;
 import com.iridevescence.interconnect.event.InterconnectBlockEvents;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -36,6 +37,7 @@ public final class Interconnect extends JavaPlugin {
         }
         this.adventure = BukkitAudiences.create(this);
         Bukkit.getPluginManager().registerEvents(new InterconnectBlockEvents(), this);
+        this.getCommand("restriction").setExecutor(new RestrictionCommand());
     }
   
     @Override
