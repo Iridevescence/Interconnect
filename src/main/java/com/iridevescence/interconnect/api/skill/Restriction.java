@@ -1,6 +1,6 @@
 package com.iridevescence.interconnect.api.skill;
 
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 
 import net.kyori.adventure.util.TriState;
 
@@ -12,7 +12,7 @@ public record Restriction(String name, String requirement, String target, Type t
         EQUIP_ITEM
     }
 
-    public boolean isUnlockedForPlayer(Player player) {
+    public boolean isUnlockedForPlayer(HumanEntity player) {
         return player.permissionValue(this.requirement) == TriState.TRUE;
     }
 }

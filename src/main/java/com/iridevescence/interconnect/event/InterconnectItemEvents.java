@@ -1,4 +1,4 @@
-package com.iridevescence.interconnect.event;
+    package com.iridevescence.interconnect.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,21 +11,25 @@ import com.iridevescence.interconnect.Interconnect;
 import com.iridevescence.interconnect.api.skill.Restriction;
 import com.iridevescence.interconnect.util.Registry;
 
+import java.util.HashMap;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 
 public class InterconnectItemEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCraftItem(CraftItemEvent event) {
-        if (event.getWhoClicked() instanceof Player player) {
-            String itemName = event.getCurrentItem().getType().name();
-            for (Restriction restriction : Registry.getRestrictionsByType(Restriction.Type.CRAFT_ITEM)) {
-                if (restriction.target() == itemName && !restriction.isUnlockedForPlayer(player)) {
-                    event.setCancelled(true);
-                    event.setResult(Result.DENY);
-                    player.sendActionBar(Component.text("You cannot craft " + itemName + " yet! You need the perk '" + Interconnect.TRANSLATIONS.getOrDefault(player.locale().getLanguage(), Interconnect.TRANSLATIONS.get("en_US")).get(restriction.name() + ".")).color(TextColor.fromHexString("#CC0033")));
-                    break;
+        String itemName = event.getCurrentItem().getType().name();
+        System.out.println(itemName);
+        for (Restriction restriction : Registry.getRestrictionsByType(Restriction.Type.CRAFT_ITEM)) {
+            System.out.println(restriction);
+            if (restriction.target().equalsIgnoreCase(itemName) && !restriction.isUnlockedForPlayer(event.getWhoClicked())) {
+                event.setCancelled(true);
+                event.setResult(Result.DENY);
+                if (event.getWhoClicked() instanceof Player player) {
+                    player.sendActionBar(Component.text("You cannot craft " + itemName + " yet! You need the perk '" + Interconnect.TRANSLATIONS.getOrDefault("en_US", new HashMap<>()).getOrDefault(restriction.name() + ".", restriction.name() + ".")).color(TextColor.fromHexString("#CC0033")));
                 }
+                break;
             }
         }
     }

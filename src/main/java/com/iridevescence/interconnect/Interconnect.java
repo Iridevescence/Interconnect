@@ -9,15 +9,17 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
 import com.iridevescence.interconnect.command.RestrictionCommand;
+import com.iridevescence.interconnect.event.InterconnectItemEvents;
 import com.iridevescence.interconnect.event.InterconnectBlockEvents;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 
 public final class Interconnect extends JavaPlugin {
-    public static final Interconnect INSTANCE = Interconnect.getPlugin(Interconnect.class);
-    public static final Logger LOGGER = INSTANCE.getSLF4JLogger();
+    public static Interconnect INSTANCE;
+    public static Logger LOGGER;
+    public static Path DATA_DIR;
 
-    public static final Path DATA_DIR = INSTANCE.getDataFolder().toPath();
+    public static Interconnect YOURPLUGININSTANCEREPLACETHISNOWPRISMDOIT;
 
     public static final HashMap<String, HashMap<String, String>> TRANSLATIONS = new HashMap<>();
 
@@ -35,9 +37,14 @@ public final class Interconnect extends JavaPlugin {
         if (!this.getDataFolder().exists()) {
             this.getDataFolder().mkdirs();
         }
+        INSTANCE = Interconnect.getPlugin(Interconnect.class);
+        LOGGER = INSTANCE.getSLF4JLogger();
+        DATA_DIR = INSTANCE.getDataFolder().toPath();
         this.adventure = BukkitAudiences.create(this);
+        Bukkit.getPluginManager().registerEvents(new InterconnectItemEvents(), this);
         Bukkit.getPluginManager().registerEvents(new InterconnectBlockEvents(), this);
         this.getCommand("restriction").setExecutor(new RestrictionCommand());
+        YOURPLUGININSTANCEREPLACETHISNOWPRISMDOIT = INSTANCE;
     }
   
     @Override

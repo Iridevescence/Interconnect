@@ -2,6 +2,9 @@ package com.iridevescence.interconnect.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
 
 import com.iridevescence.interconnect.api.skill.Restriction;
 
@@ -10,14 +13,14 @@ public class Registry {
     private static final HashMap<String, Restriction> S2R_MAPPING = new HashMap<>();
 
     public static void addRestriction(Restriction restriction) {
-        ArrayList<Restriction> list = RESTRICTIONS.get(restriction.type());
+        ArrayList<Restriction> list = RESTRICTIONS.getOrDefault(restriction.type(), new ArrayList<>());
         list.add(restriction);
         RESTRICTIONS.put(restriction.type(), list);
         S2R_MAPPING.put(restriction.name(), restriction);
     }
 
-    public static ArrayList<Restriction> getRestrictionsByType(Restriction.Type type) {
-        return RESTRICTIONS.get(type);
+    public static List<Restriction> getRestrictionsByType(Restriction.Type v) {
+        return Optional.ofNullable(RESTRICTIONS.get(v)).map((f) -> Collections.unmodifiableList(f)).orElse(Collections.emptyList());
     }
 
     public static ArrayList<Restriction> getAllRestrictions() {
