@@ -11,8 +11,11 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,6 +27,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
@@ -38,6 +42,7 @@ public class InterconnectBlockEvents implements Listener {
         Block block = event.getBlock();
         String name = block.getType().name();
         System.out.println(name);
+        ItemStack heldItem = player.getInventory().getItemInMainHand();
         for (Restriction restriction : Registry.getRestrictionsByType(Restriction.Type.BREAK_BLOCK)) {
             System.out.println(restriction);
             if (restriction.target().equalsIgnoreCase(name) && !restriction.isUnlockedForPlayer(player)) {
@@ -47,13 +52,13 @@ public class InterconnectBlockEvents implements Listener {
             }
         }
 
-        if (player.getInventory().getItemInMainHand().getType() == Material.STONE_AXE) {
+        if (heldItem.getType() == Material.STONE_AXE) {
             if (name.toLowerCase().contains("log")) {
                 System.out.println("Running TreeBreakerer!!");
                 World world = player.getWorld();
                 Set<BlockPosition> positions = new HashSet<>();
 
-                Queue<BlockPosition> posToDos = new ArrayDeque<>();
+                Queue<List<BlockPosition>> posToDos = new ArrayDeque<>();
                 TreeBreakerer.process(world, positions, new BlockPosition(block.getX(), block.getY(), block.getZ()), posToDos::add);
 
                 class BreakererTask implements Runnable {
@@ -61,18 +66,27 @@ public class InterconnectBlockEvents implements Listener {
 
                     @Override
                     public void run() {
-                        if (posToDos.isEmpty()) {
-                            task.cancel();
-                            return;
+                        int numToDo = Math.min(8, Math.max(1, posToDos.size() / 6));
+
+                        for (int i = 0; i < numToDo; i++) {
+                            if (posToDos.isEmpty()) {
+                                task.cancel();
+                                return;
+                            }
+    
+
+                            List<BlockPosition> positionList = posToDos.remove();
+
+                            for (BlockPosition position : positionList) {
+                                Location location = new Location(world, position.x(), position.y(), position.z());
+                                BlockData data = world.getBlockAt(location).getBlockData();
+                                world.spawnParticle(Particle.BLOCK_CRACK, location.add(0.5, 0.5, 0.5), 25, data);
+                                ItemStack stack = new ItemStack(world.getBlockAt(location).getType());
+                                world.getBlockAt(location).setType(Material.AIR);
+                                world.playSound(location, data.getSoundGroup().getBreakSound(), SoundCategory.BLOCKS, 1f, 1f);
+                                world.dropItem(location, stack);
+                            }
                         }
-
-                        BlockPosition position = posToDos.remove();
-
-                        Location location = new Location(world, position.x(), position.y(), position.z());
-                        world.spawnParticle(Particle.BLOCK_CRACK, location, 1, world.getBlockAt(location).getBlockData());
-                        ItemStack stack = new ItemStack(world.getBlockAt(location).getType());
-                        world.getBlockAt(location).setType(Material.AIR);
-                        world.dropItem(location, stack);
 
                     }
                 }

@@ -9,11 +9,11 @@ import java.util.List;
 import com.iridevescence.interconnect.api.skill.Restriction;
 
 public class Registry {
-    private static final HashMap<Restriction.Type, ArrayList<Restriction>> RESTRICTIONS = new HashMap<>();
+    private static final HashMap<Restriction.Type, List<Restriction>> RESTRICTIONS = new HashMap<>();
     private static final HashMap<String, Restriction> S2R_MAPPING = new HashMap<>();
 
     public static void addRestriction(Restriction restriction) {
-        ArrayList<Restriction> list = RESTRICTIONS.getOrDefault(restriction.type(), new ArrayList<>());
+        List<Restriction> list = RESTRICTIONS.getOrDefault(restriction.type(), new ArrayList<>());
         list.add(restriction);
         RESTRICTIONS.put(restriction.type(), list);
         S2R_MAPPING.put(restriction.name(), restriction);
