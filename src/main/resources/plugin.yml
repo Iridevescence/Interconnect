@@ -10,3 +10,6 @@ commands:
    restriction:
       description: Modifies restrictions.
       permission: interconnect.restriction
+   givecustomitem:
+      description: Gives a custom item
+      usage: /givecustomitem <namespaced-key>
